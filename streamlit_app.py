@@ -15,20 +15,40 @@ dot_mapping = {
 }
 dot_style = st.radio('QR Dot Style', dot_mapping)
 
-emb = None
-uploaded_img = st.file_uploader('Upload Flash for Center of QR', ['jpg', 'jpeg', 'png'])
-if uploaded_img is not None:
-    try:
-        with st.expander('Show uploaded image'):
-            st.image(uploaded_img)
-        st.success('Will use this image for center of the QR')
-        emb = Image.open(uploaded_img)
-    except Exception as e:
-        print(e)
-        st.error('Could not use uploaded image for center of QR 😢')
+# Decide how the User will provide an image
+use_upload = "Upload an Image"
+use_camera = "Use Camera to take a Photo"
+no_image = "No Image"
+image_method = st.radio("Embeded QR Image", [no_image, use_upload, use_camera])
+
+if image_method == use_upload:
+    image_file = st.file_uploader(
+        "Upload Image File for center of QR 🌄", ["png", "jpg", "jpeg"], accept_multiple_files=False
+    )
+elif image_method == use_camera:
+    image_file = st.camera_input("Take a Photo for center of QR 📸")
+elif image_method == no_image:
+    image_file = None
+
+embeded_image = None
+if image_method in (use_camera, use_upload):
+    # uploaded_img = st.file_uploader('Upload Flash for Center of QR', ['jpg', 'jpeg', 'png'])
+    if image_file is not None:
+        try:
+            with st.expander('Show uploaded image'):
+                st.image(image_file)
+            st.success('Will use this image for center of the QR')
+            embeded_image = Image.open(image_file)
+        except Exception as e:
+            print(e)
+            st.error('Could not use uploaded image for center of QR 😢\nTry another image or no image.')
+            st.stop()
+    else:
+        st.warning("Choose / take a photo to continue")
+        st.stop()
 
 qr = qrcode.QRCode(
-    version=10,
+    version=8,
     error_correction=qrcode.constants.ERROR_CORRECT_H,
     box_size=10,
     border=4,
@@ -41,7 +61,7 @@ img = qr.make_image(
     back_color="white",
     image_factory=StyledPilImage,
     module_drawer=dot_mapping[dot_style](),
-    embeded_image=emb
+    embeded_image=embeded_image
 )
 
 with io.BytesIO() as output:

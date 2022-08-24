@@ -1,2 +1,3 @@
 qrcode
 streamlit
+streamlit-cropper

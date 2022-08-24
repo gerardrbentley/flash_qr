@@ -29,7 +29,14 @@ from PIL import Image
 
 st.header("Flash QR")
 st.write(
-    "Generate Unique QR Codes For Your Project / Business.\n\nFind advanced customization in the sidebar to the left"
+    """\
+Generate Unique QR Codes For Your Project / Business.
+
+Find advanced customization in the sidebar to the left, including:
+
+- Box and Background Colors / Gradients
+- Box Shapes
+"""
 )
 
 with st.expander("Learn More:"):
@@ -41,7 +48,7 @@ Google and Meta (among others) use their own custom style of QR codes generated 
 
 But you should be advertising your own brand / business!
 
-Make it easy to create QR codes with this tool made with ❤️ by [Gar's Bar](https://gerardbentley.com) and powered by [Streamlit](https://streamlit.io) and Python `qrcode` [library](https://github.com/lincolnloop/python-qrcode).
+Make it easy to create QR codes with this tool made with ❤️ by [Gar's Bar](https://gerardbentley.com) and powered by Python libraries [`streamlit`](https://streamlit.io) and [`qrcode`](https://github.com/lincolnloop/python-qrcode).
 """
     )
 
@@ -63,18 +70,6 @@ dot_mapping = {
     "horizontal bars": HorizontalBarsDrawer,
 }
 dot_style = st.sidebar.radio("QR Box Style", dot_mapping)
-qr_version = st.sidebar.slider(
-    "QR Boxes", 1, 40, 8, help="QR Code version defines how many boxes across minimum"
-)
-box_size = st.sidebar.number_input("QR Box Size", 1, 100, 10)
-border_boxes = st.sidebar.number_input("QR Border Boxes", 1, 100, 4)
-error_mapping = {
-    "~7%": ERROR_CORRECT_L,
-    "~15%": ERROR_CORRECT_M,
-    "~25%": ERROR_CORRECT_Q,
-    "~30%": ERROR_CORRECT_H,
-}
-error_correction = st.sidebar.radio("Error Leniency", error_mapping, index=3)
 
 mask_mapping = {
     "Solid Colors": SolidFillColorMask,
@@ -145,6 +140,21 @@ use_upload = "Upload an Image"
 use_camera = "Use Camera to take a Photo"
 no_image = "No Image"
 
+st.sidebar.write('Even More Advanced:')
+qr_version = st.sidebar.slider(
+    "QR Boxes", 1, 40, 8, help="QR Code version defines how many boxes across minimum"
+)
+box_size = st.sidebar.number_input("QR Box Size", 1, 100, 10)
+border_boxes = st.sidebar.number_input("QR Border Boxes", 1, 100, 4)
+error_mapping = {
+    "~7%": ERROR_CORRECT_L,
+    "~15%": ERROR_CORRECT_M,
+    "~25%": ERROR_CORRECT_Q,
+    "~30%": ERROR_CORRECT_H,
+}
+error_correction = st.sidebar.radio("Error Leniency", error_mapping, index=3)
+
+
 if mask_cls == ImageColorMask:
     st.sidebar.info("Choose a Background Image and crop it in the center menu")
     background_image_method = st.radio(
@@ -193,8 +203,9 @@ if mask_cls == ImageColorMask:
             )
             st.stop()
     else:
-        st.warning("Choose / take a photo to continue")
+        st.warning("Choose / take a photo to continue. Don't have a Background Image? How about [this one](https://github.com/gerardrbentley/flash_qr/blob/main/bg_image.png?raw=true) (right-click to 'Save Link as...')")
         st.stop()
+
 
 
 image_method = st.radio(
@@ -246,7 +257,7 @@ if image_method in (use_camera, use_upload):
             )
             st.stop()
     else:
-        st.warning("Choose / take a photo to continue")
+        st.warning("Choose / take a photo to continue. Don't have a Center Image? How about [this one](https://github.com/gerardrbentley/flash_qr/blob/main/flash_image.png?raw=true) (right-click to 'Save Link as...')")
         st.stop()
 
 

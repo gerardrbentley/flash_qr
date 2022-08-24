@@ -1,5 +1,7 @@
 # Flash QR
 
+[![Open in Streamlit](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://gerardrbentley-flash-qr-streamlit-app-bv4dar.streamlitapp.com/)
+
 Generate Unique QR Codes from Flash Drawings
 
 Built with ❤️ by [gerardrbentley](https://github.com/gerardrbentley)
